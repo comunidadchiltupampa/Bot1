@@ -1,0 +1,2283 @@
+<!DOCTYPE html>
+<html lang="es-419">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="tool">
+  <meta name="design-style" content="briefing">
+  <title>Cuestionario de Administración de Documentos y Archivos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces: warm stone-white paper (Briefing) */
+      --background: #faf9f5;
+      --surface-container-low: #ffffff;
+      --surface-container: #f1efe8;
+      --surface-container-high: #e6e2d6;
+
+      /* Ink */
+      --on-surface: #17181a;
+      --on-surface-variant: #56585c;
+
+      /* Rules */
+      --outline: #17181a;
+      --outline-variant: #dedad0;
+
+      /* Accents */
+      --primary: #17181a;
+      --primary-hover: #2d3036;
+      --on-primary: #faf9f5;
+      --primary-container: #f2b705;
+      --on-primary-container: #17181a;
+      --secondary: #1f4e5f;
+      --secondary-soft: #eaf2f5;
+      --tertiary: #785008;
+      --tag-bg: #f5e6c4;
+      --btn-secondary-border: #c8c4b8;
+      --error: #b42318;
+      --error-soft: #fdeceb;
+      --on-error: #ffffff;
+
+      /* Data series */
+      --data-1: #1f4e5f;
+      --data-2: #d99000;
+      --data-3: #2b6e52;
+      --data-4: #b84a39;
+      --data-context: #c4bfb2;
+
+      /* Fonts */
+      --font-headline: 'Source Serif 4', Georgia, serif;
+      --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-label: 'Geist Mono', monospace;
+
+      /* Shape */
+      --rounded: 0.25rem;
+      --rounded-lg: 0.375rem;
+      --rounded-full: 0.25rem;
+
+      /* Style effects */
+      --section-rule: 1.5px solid var(--outline);
+      --card-border: 1px solid var(--outline-variant);
+      --badge-radius: 2px;
+      --heading-tracking: -0.02em;
+      --label-tracking: 0.08em;
+      --feedback-bar-correct: 4px solid var(--positive);
+      --feedback-bar-error: 4px solid var(--error);
+      --option-ring-correct: inset 0 0 0 2px var(--positive);
+      --option-ring-error: inset 0 0 0 2px var(--error);
+      --option-ring-hover: inset 0 0 0 1px var(--secondary);
+
+      /* Shared semantic tokens */
+      --positive: #1e6b48;
+      --positive-soft: #e7f4ed;
+      --warning: #785008;
+      --focus: #1f4e5f;
+
+      /* Type scale (Focused Tool) */
+      --display-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+      --headline-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+      --subhead-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+      --body-size: clamp(0.9375rem, 0.9rem + 0.15vw, 1rem);
+      --label-size: 0.75rem;
+
+      /* Spacing scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    header { position: static !important; }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-lg);
+      padding: var(--space-lg);
+      max-width: 960px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Focus rings */
+    :focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* Dossier Header */
+    .dossier-header {
+      padding-top: var(--space-xs);
+    }
+    .dossier-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-bottom: var(--section-rule);
+      padding-bottom: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    .dossier-bar-left {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .dossier-pill {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: var(--label-size);
+      letter-spacing: var(--label-tracking);
+      text-transform: uppercase;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+      line-height: 1.2;
+    }
+    .dossier-pill.is-review {
+      background: var(--secondary);
+      color: var(--on-primary);
+    }
+    .dossier-meta {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 500;
+      color: var(--on-surface-variant);
+      text-transform: uppercase;
+      letter-spacing: var(--label-tracking);
+    }
+    .title {
+      font-family: var(--font-headline);
+      font-size: var(--display-size);
+      font-weight: 700;
+      letter-spacing: var(--heading-tracking);
+      line-height: 1.1;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .standfirst {
+      font-family: var(--font-body);
+      font-size: var(--subhead-size);
+      font-weight: 600;
+      color: var(--secondary);
+      margin: var(--space-sm) 0 0 0;
+      max-width: 65ch;
+      line-height: 1.45;
+    }
+
+    /* Telemetry & Controls Strip */
+    .telemetry-panel {
+      display: grid;
+      gap: var(--space-md);
+    }
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--space-sm);
+    }
+    .figure-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .figure-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: var(--label-tracking);
+      color: var(--on-surface-variant);
+    }
+    .figure-value {
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      font-weight: 700;
+      line-height: 1.1;
+      font-variant-numeric: lining-nums tabular-nums;
+      color: var(--on-surface);
+    }
+    .figure-value.is-positive { color: var(--positive); }
+    .figure-value.is-error { color: var(--error); }
+    .figure-value.is-secondary { color: var(--secondary); }
+
+    /* Progress Track & Toolbar */
+    .progress-controls-bar {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .progress-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+    .progress-caption {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--on-surface);
+      text-transform: uppercase;
+      letter-spacing: var(--label-tracking);
+    }
+    .progress-track {
+      width: 100%;
+      height: 0.625rem;
+      background: var(--surface-container);
+      border-radius: var(--rounded);
+      overflow: hidden;
+      border: var(--card-border);
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--secondary);
+      transition: width var(--dur-short) var(--ease-out);
+    }
+    .toolbar-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      padding-top: var(--space-xs);
+      border-top: var(--card-border);
+    }
+    .toolbar-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      font-weight: 600;
+      line-height: 1.2;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  box-shadow var(--dur-micro) var(--ease-out),
+                  color var(--dur-micro) var(--ease-out),
+                  opacity var(--dur-micro) var(--ease-out);
+    }
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-primary);
+      border: 1px solid var(--primary);
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: var(--primary-hover);
+    }
+    .btn-accent {
+      background: var(--secondary);
+      color: var(--on-primary);
+      border: 1px solid var(--secondary);
+    }
+    .btn-accent:hover:not(:disabled) {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+    .btn-secondary {
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      border: 1px solid var(--btn-secondary-border);
+    }
+    .btn-secondary:hover:not(:disabled) {
+      background: var(--surface-container);
+    }
+    .btn-secondary.is-armed {
+      background: var(--tag-bg);
+      color: var(--tertiary);
+      border-color: var(--tertiary);
+    }
+    .btn-sm {
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      font-size: 0.875rem;
+    }
+
+    /* Quiz Question Card */
+    .quiz-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-xl);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+    .question-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      padding-bottom: var(--space-md);
+      border-bottom: var(--card-border);
+    }
+    .question-index {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--secondary);
+      text-transform: uppercase;
+      letter-spacing: var(--label-tracking);
+    }
+    .topic-tag {
+      background: var(--tag-bg);
+      color: var(--tertiary);
+      font-family: var(--font-body);
+      font-size: var(--label-size);
+      font-weight: 700;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--rounded);
+      line-height: 1.3;
+    }
+    .question-stem {
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      font-weight: 600;
+      line-height: 1.32;
+      color: var(--on-surface);
+      margin: 0;
+      max-width: 65ch;
+    }
+
+    /* Options List */
+    .options-list {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-sm);
+    }
+    .option-btn {
+      width: 100%;
+      min-height: 54px;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-md);
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      text-align: left;
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      font-weight: 500;
+      line-height: 1.45;
+      color: var(--on-surface);
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  box-shadow var(--dur-micro) var(--ease-out),
+                  opacity var(--dur-micro) var(--ease-out);
+    }
+    .option-btn:hover:not(:disabled) {
+      background: var(--background);
+      box-shadow: var(--option-ring-hover);
+    }
+    .option-btn:disabled {
+      cursor: default;
+    }
+    .option-letter {
+      width: 2rem;
+      height: 2rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface-container);
+      color: var(--on-surface);
+      font-family: var(--font-label);
+      font-size: 0.875rem;
+      font-weight: 600;
+      border-radius: var(--rounded);
+      flex-shrink: 0;
+    }
+    .option-text {
+      color: var(--on-surface);
+      overflow-wrap: break-word;
+    }
+    .option-status-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.5rem;
+      height: 1.5rem;
+      flex-shrink: 0;
+    }
+    .option-btn.is-correct {
+      background: var(--positive-soft);
+      box-shadow: var(--option-ring-correct);
+    }
+    .option-btn.is-correct .option-letter {
+      background: var(--positive);
+      color: var(--on-primary);
+    }
+    .option-btn.is-correct .option-status-icon {
+      color: var(--positive);
+    }
+    .option-btn.is-wrong {
+      background: var(--error-soft);
+      box-shadow: var(--option-ring-error);
+    }
+    .option-btn.is-wrong .option-letter {
+      background: var(--error);
+      color: var(--on-error);
+    }
+    .option-btn.is-wrong .option-status-icon {
+      color: var(--error);
+    }
+    .option-btn.is-dimmed {
+      opacity: 0.65;
+    }
+
+    /* Immediate Feedback Callout */
+    .feedback-box {
+      background: var(--surface-container);
+      border-radius: var(--rounded);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      animation: fadeSlideIn var(--dur-short) var(--ease-out);
+    }
+    .feedback-box.is-correct {
+      background: var(--positive-soft);
+      border-left: var(--feedback-bar-correct);
+    }
+    .feedback-box.is-error {
+      background: var(--error-soft);
+      border-left: var(--feedback-bar-error);
+    }
+    .feedback-title {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      font-weight: 700;
+      margin: 0;
+    }
+    .feedback-box.is-correct .feedback-title { color: var(--positive); }
+    .feedback-box.is-error .feedback-title { color: var(--error); }
+    .feedback-explanation {
+      margin: 0;
+      color: var(--on-surface);
+      line-height: 1.55;
+      max-width: 65ch;
+    }
+    .feedback-source {
+      margin: var(--space-xs) 0 0 0;
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+    }
+
+    @keyframes fadeSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Quiz Card Footer */
+    .quiz-footer {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      padding-top: var(--space-md);
+      border-top: var(--card-border);
+    }
+    .keyboard-hint {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+    }
+
+    /* Summary View */
+    .summary-section {
+      display: grid;
+      gap: var(--space-lg);
+      animation: fadeSlideIn var(--dur-short) var(--ease-out);
+    }
+    .summary-hero {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-top: var(--section-rule);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-xl);
+      display: grid;
+      gap: var(--space-lg);
+    }
+    .summary-header-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: var(--space-lg);
+    }
+    .summary-verdict {
+      font-family: var(--font-headline);
+      font-size: var(--display-size);
+      font-weight: 700;
+      letter-spacing: var(--heading-tracking);
+      line-height: 1.15;
+      margin: var(--space-xs) 0 0 0;
+      color: var(--on-surface);
+    }
+    .summary-subtext {
+      color: var(--on-surface-variant);
+      margin: var(--space-sm) 0 0 0;
+      max-width: 58ch;
+    }
+    .score-ring-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      min-width: 140px;
+    }
+    .score-percent-big {
+      font-family: var(--font-headline);
+      font-size: 2.25rem;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--secondary);
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    .score-ring-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      text-transform: uppercase;
+      letter-spacing: var(--label-tracking);
+      margin-top: var(--space-xs);
+    }
+    .summary-metrics-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+    .summary-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+      padding-top: var(--space-md);
+      border-top: var(--card-border);
+    }
+
+    /* Module Breakdown */
+    .breakdown-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-xl);
+      display: grid;
+      gap: var(--space-md);
+    }
+    .section-heading {
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      font-weight: 600;
+      margin: 0;
+      color: var(--on-surface);
+      padding-bottom: var(--space-sm);
+      border-bottom: var(--section-rule);
+    }
+    .breakdown-list {
+      display: grid;
+      gap: var(--space-md);
+    }
+    .breakdown-row {
+      display: grid;
+      gap: var(--space-xs);
+    }
+    .breakdown-row-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: var(--space-sm);
+    }
+    .breakdown-name {
+      font-weight: 600;
+      color: var(--on-surface);
+    }
+    .breakdown-stat {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--secondary);
+    }
+    .breakdown-bar-track {
+      width: 100%;
+      height: 0.5rem;
+      background: var(--surface-container);
+      border-radius: var(--rounded);
+      overflow: hidden;
+    }
+    .breakdown-bar-fill {
+      height: 100%;
+      background: var(--data-1);
+      transition: width var(--dur-short) var(--ease-out);
+    }
+    .breakdown-bar-fill.is-full { background: var(--positive); }
+    .breakdown-bar-fill.is-low { background: var(--data-4); }
+
+    /* Answer Log Review List */
+    .review-log-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+    .filter-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .filter-pill {
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded);
+      border: 1px solid var(--btn-secondary-border);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .filter-pill.is-active {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+    .log-items {
+      display: grid;
+      gap: var(--space-md);
+    }
+    .log-item {
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+      display: grid;
+      gap: var(--space-xs);
+    }
+    .log-item.is-correct { border-left: var(--feedback-bar-correct); }
+    .log-item.is-wrong { border-left: var(--feedback-bar-error); }
+    .log-item-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+    }
+    .log-badge-ok { color: var(--positive); font-weight: 600; }
+    .log-badge-err { color: var(--error); font-weight: 600; }
+    .log-question {
+      font-weight: 600;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .log-answer-line {
+      margin: 0;
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
+    }
+    .log-answer-line strong {
+      color: var(--on-surface);
+    }
+
+    /* Footer Sources Note */
+    .source-footer {
+      background: var(--surface-container);
+      border-top: var(--section-rule);
+      padding: var(--space-md) var(--space-lg);
+      border-radius: var(--rounded);
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
+      line-height: 1.5;
+    }
+    .source-footer p {
+      margin: 0;
+    }
+
+    .is-hidden {
+      display: none !important;
+    }
+
+    /* Container queries & responsive layout */
+    .card-wrapper {
+      container-type: inline-size;
+    }
+    @container (max-width: 520px) {
+      .quiz-card, .summary-hero, .breakdown-card {
+        padding: var(--space-md);
+      }
+      .summary-header-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .score-ring-wrap {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-sm);
+        gap: var(--space-md);
+      }
+      .metrics-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .summary-metrics-row {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .quiz-card, .summary-hero, .breakdown-card {
+        padding: var(--space-md);
+      }
+      .keyboard-hint {
+        display: none;
+      }
+      .toolbar-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .toolbar-group {
+        width: 100%;
+      }
+      .toolbar-group .btn {
+        flex: 1 1 auto;
+      }
+      .quiz-footer {
+        flex-direction: column-reverse;
+        align-items: stretch;
+      }
+      .quiz-footer .btn {
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-grid">
+    <header class="dossier-header">
+      <div class="dossier-bar">
+        <div class="dossier-bar-left">
+          <span class="dossier-pill" id="mode-pill">Evaluación integral</span>
+          <span class="dossier-meta" id="header-meta">36 preguntas · Archivística y gestión documental</span>
+        </div>
+        <span class="dossier-meta" id="save-status">Progreso guardado</span>
+      </div>
+      <h1 class="title">Administración de documentos y archivos</h1>
+      <p class="standfirst">Cuestionario interactivo basado exclusivamente en los textos fundamentales sobre principios archivísticos, normativa técnica, clasificación, valoración y gestión del sistema.</p>
+    </header>
+
+    <section class="telemetry-panel" aria-label="Panel de puntaje y progreso">
+      <div class="metrics-grid">
+        <div class="figure-card">
+          <span class="figure-label">Progreso</span>
+          <span class="figure-value is-secondary" id="stat-progress">1 / 36</span>
+        </div>
+        <div class="figure-card">
+          <span class="figure-label">Aciertos</span>
+          <span class="figure-value is-positive" id="stat-correct">0</span>
+        </div>
+        <div class="figure-card">
+          <span class="figure-label">Falladas</span>
+          <span class="figure-value is-error" id="stat-wrong">0</span>
+        </div>
+        <div class="figure-card">
+          <span class="figure-label">Puntaje actual</span>
+          <span class="figure-value" id="stat-percent">0%</span>
+        </div>
+      </div>
+
+      <div class="progress-controls-bar">
+        <div class="progress-top">
+          <span class="progress-caption" id="progress-label">Respondidas: 0 de 36 (0%)</span>
+          <span class="dossier-meta" id="order-label">Orden original del manual</span>
+        </div>
+        <div class="progress-track" role="progressbar" id="progress-bar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Porcentaje de preguntas respondidas">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="toolbar-actions">
+          <div class="toolbar-group">
+            <button type="button" class="btn btn-secondary btn-sm" id="btn-shuffle" onclick="handleShuffleClick(this)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
+              <span>Mezclar preguntas</span>
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" id="btn-reset" onclick="handleResetClick(this)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+              <span>Reiniciar cuestionario</span>
+            </button>
+          </div>
+          <div class="toolbar-group">
+            <button type="button" class="btn btn-secondary btn-sm is-hidden" id="btn-exit-review" onclick="exitReviewMode()">
+              <span>Volver al cuestionario completo</span>
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm is-hidden" id="btn-jump-summary" onclick="openSummaryView()">
+              <span>Ver resumen</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <main class="card-wrapper" id="main-stage">
+      <!-- Active Question View -->
+      <article class="quiz-card" id="quiz-view" aria-live="polite">
+        <div class="question-meta-row">
+          <span class="question-index" id="q-counter">Pregunta 01 de 36</span>
+          <span class="topic-tag" id="q-topic">Bloque temático</span>
+        </div>
+
+        <h2 class="question-stem" id="q-stem">Cargando pregunta…</h2>
+
+        <div class="options-list" id="options-container" role="group" aria-label="Opciones de respuesta"></div>
+
+        <div class="feedback-box is-hidden" id="feedback-box" aria-live="polite">
+          <p class="feedback-title" id="feedback-title"></p>
+          <p class="feedback-explanation" id="feedback-explanation"></p>
+          <p class="feedback-source" id="feedback-source"></p>
+        </div>
+
+        <div class="quiz-footer">
+          <div class="toolbar-group">
+            <button type="button" class="btn btn-secondary" id="btn-prev" onclick="goToPrevQuestion()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+              <span>Anterior</span>
+            </button>
+            <span class="keyboard-hint">Atajos: A–D o 1–4 para responder · Enter para avanzar</span>
+          </div>
+          <button type="button" class="btn btn-primary" id="btn-next" onclick="goToNextQuestion()">
+            <span id="btn-next-label">Siguiente pregunta</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </button>
+        </div>
+      </article>
+
+      <!-- Final Summary View -->
+      <section class="summary-section is-hidden" id="summary-view" aria-label="Resumen final del cuestionario">
+        <div class="summary-hero">
+          <div class="summary-header-grid">
+            <div>
+              <span class="dossier-pill" id="summary-pill">Resumen final</span>
+              <h2 class="summary-verdict" id="summary-verdict">Resultados del cuestionario</h2>
+              <p class="summary-subtext" id="summary-subtext"></p>
+            </div>
+            <div class="score-ring-wrap">
+              <span class="score-percent-big" id="summary-percent">0%</span>
+              <span class="score-ring-label">Porcentaje de aciertos</span>
+            </div>
+          </div>
+
+          <div class="summary-metrics-row">
+            <div class="figure-card">
+              <span class="figure-label">Puntaje total</span>
+              <span class="figure-value" id="summary-score-total">0 / 36</span>
+            </div>
+            <div class="figure-card">
+              <span class="figure-label">Respuestas correctas</span>
+              <span class="figure-value is-positive" id="summary-correct-count">0</span>
+            </div>
+            <div class="figure-card">
+              <span class="figure-label">Preguntas falladas</span>
+              <span class="figure-value is-error" id="summary-wrong-count">0</span>
+            </div>
+          </div>
+
+          <div class="summary-actions">
+            <button type="button" class="btn btn-accent" id="btn-review-missed" onclick="startReviewMissedMode()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              <span id="btn-review-missed-label">Repasar preguntas falladas</span>
+            </button>
+            <button type="button" class="btn btn-primary" onclick="restartAndShuffleFromSummary()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
+              <span>Mezclar y repetir todo</span>
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="restartOrderedFromSummary()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+              <span>Reiniciar en orden original</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="breakdown-card" id="breakdown-card">
+          <h3 class="section-heading">Desempeño por bloque temático</h3>
+          <div class="breakdown-list" id="breakdown-list"></div>
+        </div>
+
+        <div class="breakdown-card">
+          <div class="review-log-header">
+            <h3 class="section-heading" style="border-bottom: 0; padding-bottom: 0;">Detalle de respuestas</h3>
+            <div class="filter-pills" role="group" aria-label="Filtrar preguntas del resumen">
+              <button type="button" class="filter-pill is-active" id="filter-all" onclick="setSummaryFilter('all')">Todas</button>
+              <button type="button" class="filter-pill" id="filter-wrong" onclick="setSummaryFilter('wrong')">Falladas</button>
+              <button type="button" class="filter-pill" id="filter-correct" onclick="setSummaryFilter('correct')">Correctas</button>
+            </div>
+          </div>
+          <div class="log-items" id="summary-log-list"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="source-footer">
+      <p><strong>Fuentes del cuaderno:</strong> Contenido elaborado exclusivamente a partir de los capítulos de <em>Administración de documentos y archivos. Textos fundamentales</em> (dir. José Ramón Cruz Mundet, Coordinadora de Asociaciones de Archiveros, 2011), incluyendo los aportes de Aurelio Tanodi, José Ramón Cruz Mundet, Alejandro Delgado Gómez, Alicia Barnard Amozorrutia, Ramón Aguilera Murguía, Ana M. Herrero Montero, Alfonso Díaz Rodríguez, Lucília Runa, Lluís Cermeno Martorell, Elena Rivas Palá, José Antonio Sáinz Varela, Virginia Chacón Arias, Aída Luz Mendoza Navarro y Joaquim Llansó Sanjuán.</p>
+    </footer>
+  </div>
+
+  <api-shim></api-shim>
+
+  <script>
+    const LETTERS = ['A', 'B', 'C', 'D'];
+
+    const QUESTIONS = [
+      {
+        id: 1,
+        module: `01 · Principios y Archivística`,
+        question: `¿Por qué José Ramón Cruz Mundet opta por la voz «administración» en lugar de «gestión» en el título de la obra?`,
+        options: [
+          `Porque abarca tanto el tratamiento integral de los documentos con herramientas técnicas como la planificación integral de los archivos como sistemas de recursos`,
+          `Porque el término «gestión» carece de origen etimológico clásico y se usa solo en informática`,
+          `Porque «administración» se restringe únicamente a la custodia pasiva en archivos históricos públicos`,
+          `Porque las normas ISO prohíben expresamente utilizar la palabra «gestión» en textos en español`
+        ],
+        correct: 0,
+        explanation: `En la Introducción, Cruz Mundet explica que, aunque «gestión» y «administración» son cuasi sinónimos, «administración» refleja el tratamiento integral de los documentos y la planificación integral de los archivos como sistemas compuestos por recursos financieros, humanos, tecnológicos y normativos.`,
+        source: `Introducción · José Ramón Cruz Mundet`
+      },
+      {
+        id: 2,
+        module: `01 · Principios y Archivística`,
+        question: `Según la definición canónica propuesta en el capítulo 1, ¿cuál es el objeto, la finalidad y el método de la Archivística?`,
+        options: [
+          `Su objeto son los documentos publicados; su finalidad es la crítica literaria; su método es la catalogación temática`,
+          `Su objeto son los documentos y los archivos; su finalidad es almacenar información y hacerla recuperable para su uso; su método se articula en torno a las normas archivísticas`,
+          `Su objeto es el edificio del archivo; su finalidad es la conservación perpetua sin consulta externa; su método es el orden alfabético`,
+          `Su objeto es exclusivamente el documento electrónico; su finalidad es la destrucción periódica; su método es el muestreo aleatorio`
+        ],
+        correct: 1,
+        explanation: `Cruz Mundet define la Archivística como una ciencia emergente cuyo objeto son los documentos y los archivos, cuya finalidad es almacenar información y hacerla recuperable para su uso, y cuyo método se articula en torno a las normas archivísticas.`,
+        source: `Cap. 1 · 1.1 Concepto de Archivística`
+      },
+      {
+        id: 3,
+        module: `01 · Principios y Archivística`,
+        question: `¿Cómo se relacionan la teoría archivística y la práctica archivística según el capítulo 1?`,
+        options: [
+          `Son dos esferas independientes que nunca se modifican entre sí`,
+          `La teoría carece de sustento empírico y solo la práctica responde a problemas reales`,
+          `Se alimentan mutuamente en un ciclo: la teoría parte de la experiencia y su aplicación cambia los procedimientos y el universo estudiado`,
+          `La práctica archivística está prohibida en la corriente teórica del siglo XX`
+        ],
+        correct: 2,
+        explanation: `Según el texto, la teoría y la práctica archivísticas se retroalimentan: los enunciados teóricos tienen un sustento empírico y, al aplicarse, los procedimientos cambian y transforman el universo estudiado, reiniciando el ciclo.`,
+        source: `Cap. 1 · 1.1 Concepto de Archivística`
+      },
+      {
+        id: 4,
+        module: `01 · Principios y Archivística`,
+        question: `¿Qué tres ámbitos de conocimiento integran el «área específica» de la ciencia Archivística?`,
+        options: [
+          `La Administración, el Derecho y las Tecnologías de la Información`,
+          `La Historia, la Lingüística y la Contabilidad pública`,
+          `La reprografía, la difusión cultural y la arquitectura de edificios`,
+          `La teoría archivística, la producción e interpretación de los documentos, y la gestión de los documentos`
+        ],
+        correct: 3,
+        explanation: `El área específica de la Archivística comprende tres ámbitos: la teoría archivística, la producción e interpretación de los documentos, y la gestión de los documentos. Disciplinas como Administración, Derecho, TIC, Historia y Lingüística forman parte del área aplicada o auxiliar.`,
+        source: `Cap. 1 · 1.2 Divisiones de la Archivística`
+      },
+      {
+        id: 5,
+        module: `01 · Principios y Archivística`,
+        question: `Dentro del área aplicada o auxiliar de la Archivística, ¿qué función cumple la Lingüística?`,
+        options: [
+          `Configura el contenido de los documentos y se emplea para representarlo en la descripción, la clasificación, las ontologías y la indización`,
+          `Establece los plazos legales de prescripción jurídica de los expedientes administrativos`,
+          `Determina la resistencia física de los soportes ópticos y magnéticos frente al calor`,
+          `Sustituye al principio de procedencia cuando los fondos superan los cien años de antigüedad`
+        ],
+        correct: 0,
+        explanation: `La Lingüística, como ciencia de la lengua, integra el área aplicada o auxiliar porque configura el contenido de los documentos y sirve para representarlo en procesos como la descripción, la clasificación, las ontologías y la indización.`,
+        source: `Cap. 1 · 1.2 Divisiones de la Archivística`
+      },
+      {
+        id: 6,
+        module: `01 · Principios y Archivística`,
+        question: `¿Qué tesis central sostiene la Archivística postmoderna frente a la Archivística positivista?`,
+        options: [
+          `Que existen leyes universales e inmutables que hacen totalmente objetivos al archivo y al archivero`,
+          `Que el archivo y el trabajo del archivero no son neutrales ni pueden escapar de la subjetividad, actuando el archivero como mediador e intérprete`,
+          `Que los archivos deben conservar únicamente registros financieros y descartar cualquier diferencia narrativa`,
+          `Que el archivero debe ocultar por escrito las razones y criterios de sus decisiones técnicas`
+        ],
+        correct: 1,
+        explanation: `Frente al positivismo que postula leyes universales e inmutables, la Archivística postmoderna sostiene que el archivo no es neutral ni escapa de la subjetividad; concibe al archivero como mediador e intérprete responsable de documentar con transparencia los criterios y valores de sus decisiones.`,
+        source: `Cap. 1 · 1.1 y 1.3 Debates teóricos`
+      },
+      {
+        id: 7,
+        module: `02 · Paradigmas Archivísticos`,
+        question: `¿Quién formuló en 1841 el Principio de procedencia (Respect des fonds) y la noción de «fondo de archivo» mediante la circular francesa del 24 de abril?`,
+        options: [
+          `Philip Coolidge Brooks`,
+          `Sir Hilary Jenkinson`,
+          `Natalis de Wailly`,
+          `Frank Upward`
+        ],
+        correct: 2,
+        explanation: `El historiador francés Natalis de Wailly, jefe de la Sección Administrativa de los Archivos Departamentales en el Ministerio del Interior, elaboró la circular del 24 de abril de 1841, considerada el punto de arranque de la Archivística moderna y del principio de procedencia.`,
+        source: `Cap. 1 · 1.3 Los paradigmas y Cap. 4.2`
+      },
+      {
+        id: 8,
+        module: `02 · Paradigmas Archivísticos`,
+        question: `¿Qué estableció el «Registraturprinzip» o Principio de respeto al orden original formulado en los reglamentos prusianos de 1881?`,
+        options: [
+          `Que los documentos de distintos ministerios debían mezclarse y clasificarse por materias o asuntos`,
+          `Que los documentos debían destruirse al cabo de cinco años tras cerrar su tramitación en la oficina`,
+          `Que el orden original solo debía respetarse en documentos impresos y nunca en manuscritos`,
+          `Que los documentos de cada fondo debían mantenerse en el orden y con las designaciones que les dio la oficina de origen`
+        ],
+        correct: 3,
+        explanation: `Los reglamentos prusianos de 1881 (publicados por Heinrich von Sybel a partir de los planteamientos de Max Lehmann) consagraron el Registraturprinzip: los papeles oficiales de cada dependencia deben conservarse en el orden y con las designaciones recibidas en su oficina de origen.`,
+        source: `Cap. 1 · 1.3 Los paradigmas y Cap. 4.2`
+      },
+      {
+        id: 9,
+        module: `02 · Paradigmas Archivísticos`,
+        question: `¿Qué aporte decisivo realizó el manual de los archiveros holandeses S. Muller, J. A. Feith y R. Fruin publicado en 1898?`,
+        options: [
+          `Consumó la aceptación del respeto de los fondos como axioma fundamental y añadió el principio de restablecer el orden y la estructura orgánica original si se habían perdido`,
+          `Introdujo el concepto australiano del Records Continuum basado en cuatro dimensiones`,
+          `Creó la norma ISO 15489 para la gestión de documentos electrónicos de oficina`,
+          `Prohibió reconstruir la estructura orgánica de las instituciones productoras`
+        ],
+        correct: 0,
+        explanation: `El manual holandés de 1898 difundió universalmente el principio de procedencia y enfatizó el respeto a la estructura archivística original (Structuurbeginsel), señalando el deber del archivero de restaurarla (Restauratiebeginsel) cuando se hubiese perdido.`,
+        source: `Cap. 1 · 1.3 y Cap. 4.2 · 2.2`
+      },
+      {
+        id: 10,
+        module: `02 · Paradigmas Archivísticos`,
+        question: `¿Quién introdujo en 1940 el concepto del «Ciclo de Vida de los Documentos» (life cycle of records) ante la Society of American Archivists?`,
+        options: [
+          `Solon J. Buck`,
+          `Philip Coolidge Brooks`,
+          `Theodor R. Schellenberg`,
+          `Ira A. Penn`
+        ],
+        correct: 1,
+        explanation: `Philip Coolidge Brooks enunció el teorema en 1940 en su ponencia «What records shall we preserve». Posteriormente, Solon J. Buck lo desarrolló en la práctica gubernamental estadounidense e Ira A. Penn impulsó su mayor difusión desde la década de 1980.`,
+        source: `Cap. 1 · 1.3 Los paradigmas`
+      },
+      {
+        id: 11,
+        module: `02 · Paradigmas Archivísticos`,
+        question: `¿Cuál de las siguientes afirmaciones NO corresponde a las tres críticas señaladas contra el paradigma clásico del Ciclo de Vida?`,
+        options: [
+          `Que los documentos no «mueren», sino que pasan a conservarse con otra utilidad histórico-cultural o probatoria`,
+          `Que la división en tres edades es demasiado estricta porque un documento puede regresar a la fase activa por una revisión o juicio`,
+          `Que obliga a eliminar obligatoriamente todos los expedientes electrónicos al cumplir un año`,
+          `Que está demasiado enfocado en los documentos como entidades físicas y en tareas operacionales irrelevantes para los documentos electrónicos`
+        ],
+        correct: 2,
+        explanation: `El texto identifica tres críticas al ciclo de vida: los documentos no mueren (cambian de utilidad), las tres edades son rígidas ante posibles retornos a la fase activa, y su enfoque físico resulta inadecuado para los documentos electrónicos. Tras su enmienda dio paso a la Archivística integrada.`,
+        source: `Cap. 1 · 1.3 Los paradigmas`
+      },
+      {
+        id: 12,
+        module: `02 · Paradigmas Archivísticos`,
+        question: `¿Cuáles son los cuatro ejes que estructuran el «Modelo de la Continuidad de los Documentos» (Records Continuum) de Frank Upward?`,
+        options: [
+          `Eje físico, eje digital, eje presupuestario y eje arquitectónico`,
+          `Eje de creación, eje de expurgo, eje de difusión y eje de reprografía`,
+          `Eje activo, eje semiactivo, eje inactivo y eje patrimonial`,
+          `Eje archivístico, eje probatorio, eje transaccional y eje identitario`
+        ],
+        correct: 3,
+        explanation: `El modelo de la continuidad de Frank Upward (1996–1997) se construye en torno a cuatro ejes —archivístico, probatorio, transaccional e identitario— combinados con cuatro dimensiones: crear, capturar, organizar y pluralizar, superando la oposición entre prueba y memoria.`,
+        source: `Cap. 1 · 1.3 Los paradigmas`
+      },
+      {
+        id: 13,
+        module: `03 · Archivo y Documento`,
+        question: `Según la división tradicional del fondo en tres fases, ¿qué define al «archivo intermedio»?`,
+        options: [
+          `Concentra documentos cuya tramitación concluyó y cuyo uso para la gestión es hipotético, garantizando su instalación masiva a bajo coste bajo manejo directo del archivero`,
+          `Reúne exclusivamente los documentos en tramitación diaria bajo responsabilidad directa de cada oficina administrativa`,
+          `Custodia únicamente piezas históricas seleccionadas a perpetuidad que ya no pueden retornar nunca a la gestión`,
+          `Es una bodega temporal donde se eliminan todos los expedientes sin esperar plazos ni procedimientos`
+        ],
+        correct: 0,
+        explanation: `El archivo intermedio recibe documentos de tramitación conclusa cuyo uso administrativo es solo hipotético; garantiza instalaciones masivas a bajo coste y marca el inicio de la responsabilidad y manejo directo del archivero.`,
+        source: `Cap. 1 · 2. El archivo`
+      },
+      {
+        id: 14,
+        module: `03 · Archivo y Documento`,
+        question: `¿Por qué señala Cruz Mundet que el plazo tradicional de cinco años de permanencia en el archivo de gestión resulta excesivamente amplio?`,
+        options: [
+          `Porque la legislación internacional ordena destruir todos los expedientes administrativos a los seis meses`,
+          `Porque pasado un año el 90 % de los expedientes conclusos ya no se usan para la gestión y en cinco años se producen más documentos de los que las oficinas o plataformas pueden alojar`,
+          `Porque después de un año ningún documento puede volver a ser consultado en un proceso judicial`,
+          `Porque los documentos electrónicos se borran automáticamente de las computadoras a los doce meses`
+        ],
+        correct: 1,
+        explanation: `La experiencia demuestra que la información útil para la gestión prescribe en plazos cada vez más cortos: pasado un año, en el 90 % de los casos los documentos conclusos no se emplean, mientras que en cinco años su volumen desborda tanto las oficinas como las plataformas de flujo de trabajo.`,
+        source: `Cap. 1 · 2. El archivo`
+      },
+      {
+        id: 15,
+        module: `03 · Archivo y Documento`,
+        question: `¿Qué cuatro elementos diferenciadores caracterizan al documento en sentido archivístico según Theodor R. Schellenberg?`,
+        options: [
+          `Creatividad, publicación editorial, aislamiento individual y valor estético`,
+          `Soporte óptico, firma digital, metadatos de búsqueda y formato abierto`,
+          `Carácter seriado, génesis en un proceso natural de actividad, exclusividad e interrelación`,
+          `Originalidad literaria, multiplicidad de copias comerciales, voluntariedad y acceso irrestricto`
+        ],
+        correct: 2,
+        explanation: `Schellenberg destaca que el documento archivístico posee carácter seriado (se produce uno a uno formando series), génesis natural dentro de las tareas del productor, exclusividad informativa e interrelación dentro de un expediente o conjunto.`,
+        source: `Cap. 1 · 3.1 Concepto de documento`
+      },
+      {
+        id: 16,
+        module: `03 · Archivo y Documento`,
+        question: `¿Qué significa que un documento posea «autenticidad» como característica definitoria?`,
+        options: [
+          `Que está completo e inalterado en cada una de sus hojas físicas`,
+          `Que puede ser localizado, recuperado, presentado e interpretado rápidamente`,
+          `Que sus contenidos dan fe exacta de las transacciones futuras de la organización`,
+          `Que puede probar que es lo que pretende ser, que fue creado o enviado por la persona que se presume y en el tiempo presumido`
+        ],
+        correct: 3,
+        explanation: `El capítulo 1 distingue cuatro cualidades: la autenticidad prueba qué es, quién lo creó o envió y cuándo; la fiabilidad garantiza contenidos fidedignos; la integridad indica que está completo e inalterado; y la manejabilidad asegura que es accesible e interpretable.`,
+        source: `Cap. 1 · 3.1 Concepto de documento`
+      },
+      {
+        id: 17,
+        module: `03 · Archivo y Documento`,
+        question: `En la sistematización de los caracteres de los documentos de Schellenberg, ¿cuáles pertenecen a los «caracteres internos»?`,
+        options: [
+          `Entidad productora, orígenes funcionales, fecha y lugar de producción, y contenido sustantivo`,
+          `Clase, tipo, formato, cantidad y forma (tradición documental)`,
+          `Soporte, tinta, sellos metálicos, metros lineales y encuadernación`,
+          `Software de presentación, extensión de archivo y resolución en puntos por pulgada`
+        ],
+        correct: 0,
+        explanation: `Schellenberg divide los caracteres del documento en externos (clase, tipo, formato, cantidad y forma) e internos (entidad productora, orígenes funcionales, fecha y lugar de producción, y contenido sustantivo).`,
+        source: `Cap. 1 · 3.2 Caracteres del documento`
+      },
+      {
+        id: 18,
+        module: `03 · Archivo y Documento`,
+        question: `¿Qué tres condiciones simultáneas distinguen a la información archivística frente a la de otras disciplinas vecinas, según Cruz Mundet?`,
+        options: [
+          `Es externa, creativa y carente de regulación procedimental`,
+          `Es una información interna, previsible y reglada en su creación, uso y conservación`,
+          `Es pública, espontánea y exclusivamente registrada en papel manuscrito`,
+          `Es comercial, artística y sujeta únicamente a derechos de propiedad intelectual`
+        ],
+        correct: 1,
+        explanation: `La información objeto de la Archivística siempre cumple tres condiciones simultáneas: es interna (producida inevitablemente en las actividades del productor), previsible (fruto de procesos establecidos) y reglada (sujeta a normas en su creación, uso y conservación). Cruz Mundet añade que la expresión «documento de archivo» es un pleonasmo derivado de malas traducciones de «record».`,
+        source: `Cap. 1 · 3.5 La información archivística`
+      },
+      {
+        id: 19,
+        module: `04 · Normativa, Digital y Metadatos`,
+        question: `¿Por qué la conexión entre el contenido y el medio constituye un factor crítico en el documento electrónico?`,
+        options: [
+          `Porque el contenido electrónico es inseparable de un único soporte físico y nunca puede migrarse`,
+          `Porque los documentos electrónicos no necesitan hardware ni software para ser decodificados`,
+          `Porque el contenido electrónico puede separarse de su medio original y transferirse a otros soportes, lo que aumenta el riesgo de corrupción y exige resguardar su autenticidad y fiabilidad`,
+          `Porque al separarse del soporte original el documento adquiere automáticamente valor histórico permanente`
+        ],
+        correct: 2,
+        explanation: `A diferencia del documento tradicional, cuyo contenido es inseparable del soporte, el documento electrónico puede separarse de su medio original y transferirse a otros soportes, elevando el riesgo de corrupción y obligando a proteger su estructura lógica, autenticidad y fiabilidad mediante metadatos.`,
+        source: `Cap. 1 · 3.4 El documento electrónico`
+      },
+      {
+        id: 20,
+        module: `04 · Normativa, Digital y Metadatos`,
+        question: `De acuerdo con la taxonomía del Proyecto InterPARES citada en el capítulo 2, ¿cómo se define una «recomendación»?`,
+        options: [
+          `Como una orden vinculante de cumplimiento obligatorio promulgada por una autoridad central`,
+          `Como una ley parlamentaria que sanciona la destrucción ilegal de patrimonio`,
+          `Como un esquema informático obligatorio para el intercambio de bases de datos`,
+          `Como una declaración de política o procedimiento formulada por un cuerpo con autoridad, pero menos vinculante que una directiva o una norma técnica formal`
+        ],
+        correct: 3,
+        explanation: `Alejandro Delgado Gómez recoge las distinciones de InterPARES: una directiva es una orden o instrucción promulgada por una autoridad, mientras que una recomendación indica un curso de acción formulado por un cuerpo autorizado, con menor carácter vinculante que una directiva o norma técnica formal.`,
+        source: `Cap. 2 · 1. Introducción a la normativa`
+      },
+      {
+        id: 21,
+        module: `04 · Normativa, Digital y Metadatos`,
+        question: `En el diseño de un Sistema de Gestión Documental (SGD), ¿qué pasos iniciales recomienda ejecutar la norma ISO 15489?`,
+        options: [
+          `Realizar una investigación preliminar del entorno, analizar funciones, actividades y transacciones, identificar requisitos de evidencia y evaluar los sistemas existentes`,
+          `Digitalizar todos los legajos históricos sin analizar primero los procesos de negocio`,
+          `Eliminar los cuadros de clasificación funcionales para ordenar por fecha de entrada`,
+          `Delegar toda la gestión documental al archivo histórico una vez pasados cinco años`
+        ],
+        correct: 0,
+        explanation: `Según expone Alicia Barnard citando la ISO 15489, el diseño de un SGD exige investigar preliminarmente el entorno de creación, analizar y jerarquizar funciones, actividades y transacciones, identificar requisitos de evidencia y evaluar el desempeño de los sistemas existentes.`,
+        source: `Cap. 3 · 4.1 Norma ISO 15489`
+      },
+      {
+        id: 22,
+        module: `04 · Normativa, Digital y Metadatos`,
+        question: `Según Philip Bantin (2008), ¿qué procesos comunes comparten la norma ISO 15489, el estándar estadounidense DoD 5015.2 y el modelo europeo MoReq?`,
+        options: [
+          `Únicamente la restauración física del papel y el control ambiental de humedades`,
+          `Identificación e integración documental, soporte a un cuadro de clasificación, captura de metadatos, control de auditoría, aseguramiento de uso, seguridad, disposición y preservación`,
+          `Exclusivamente la publicación de exposiciones culturales y el servicio de fotocopia`,
+          `La sustitución completa de las series documentales por colecciones temáticas de libros`
+        ],
+        correct: 1,
+        explanation: `Bantin identifica ocho procesos comunes entre ISO 15489, DoD 5015.2 y MoReq: identificación e integración de documentos, soporte a clasificación, captura de metadatos, trazas de auditoría, aseguramiento de uso, control y seguridad, disposición automatizada y preservación ante cambios tecnológicos.`,
+        source: `Cap. 3 · 4.2 Modelos de requisitos`
+      },
+      {
+        id: 23,
+        module: `04 · Normativa, Digital y Metadatos`,
+        question: `¿Cuál es la finalidad primaria de los metadatos de gestión de documentos según la norma ISO 23081 y el capítulo 2?`,
+        options: [
+          `Sustituir la seguridad informática eliminando los controles de acceso de usuarios`,
+          `Servir únicamente como etiquetas estéticas para el diseño gráfico de carátulas`,
+          `Proporcionar contexto y reforzar las garantías de evidencia del documento, mediante una aproximación multi-entidad y relacional desde y después del punto de captura`,
+          `Permitir que cualquier usuario modifique libremente el contenido original sin dejar rastro`
+        ],
+        correct: 2,
+        explanation: `A diferencia de otras disciplinas enfocadas en la recuperación, en gestión de documentos los metadatos buscan ante todo proporcionar contexto y reforzar la evidencia. ISO 23081 distingue metadatos en el punto de captura y posteriores a este, y adopta una visión multi-entidad y relacional.`,
+        source: `Cap. 2 · 4. Los metadatos e ISO 23081`
+      },
+      {
+        id: 24,
+        module: `04 · Normativa, Digital y Metadatos`,
+        question: `¿Cuál fue el origen del Modelo de Referencia OAIS (ISO 14721) y qué función cumple actualmente?`,
+        options: [
+          `Fue creado por archivos municipales españoles para regular el préstamo en sala`,
+          `Nació como un reglamento jurídico de protección de datos personales en la Unión Europea`,
+          `Fue diseñado para clasificar correspondencia diplomática en papel del siglo XIX`,
+          `Surgió en el Comité Consultivo para los Sistemas de Datos del Espacio (CCSDS) y hoy sirve de base para diseñar repositorios digitales de preservación a largo plazo y auditar su confiabilidad`
+        ],
+        correct: 3,
+        explanation: `El modelo OAIS fue desarrollado por el CCSDS para el almacenamiento de datos espaciales a largo plazo y se convirtió en la norma ISO 14721. Actualmente fundamenta el diseño de repositorios digitales y criterios de auditoría y certificación como DRAMBORA, nestor y TRAC.`,
+        source: `Cap. 3 · 6.1 Modelo de referencia OAIS`
+      },
+      {
+        id: 25,
+        module: `05 · Clasificación y Valoración`,
+        question: `¿Sobre qué base metodológica debe realizarse la identificación de las series documentales?`,
+        options: [
+          `Sobre un proceso lógico de análisis de las funciones del organismo y del principio de procedencia, ya que las series resultan de actividades desempeñadas para cumplir dichas funciones`,
+          `Sobre la preferencia subjetiva de cada oficina o jefe de departamento`,
+          `Sobre la agrupación cronológica o por tamaño físico de las carpetas y legajos`,
+          `Sobre la separación de documentos según el software comercial con el que fueron impresos`
+        ],
+        correct: 0,
+        explanation: `El capítulo 4.1 concluye que la identificación de las series requiere un análisis funcional de la organización conforme al principio de procedencia —apoyado en normas como la ISDF—, pues las series vinculan al productor con su producto: los documentos y expedientes.`,
+        source: `Cap. 4.1 · La identificación`
+      },
+      {
+        id: 26,
+        module: `05 · Clasificación y Valoración`,
+        question: `¿Cómo define José Ramón Cruz Mundet el proceso de clasificación archivística citado en el capítulo 4.2?`,
+        options: [
+          `Como la tarea manual de foliar con lápiz cada página de un expediente terminado`,
+          `Como un proceso cuyo fin es estructurar los documentos de una entidad identificando tipos documentales, evidenciando sus relaciones y organizándolos jerárquicamente en un cuadro de clasificación`,
+          `Como la operación física de destruir documentos que han perdido vigencia administrativa`,
+          `Como el registro de entrada de investigadores externos en la sala de consulta`
+        ],
+        correct: 1,
+        explanation: `Cruz Mundet define la clasificación como el proceso archivístico destinado a estructurar los documentos de una entidad: identifica los tipos documentales, evidencia las relaciones existentes entre ellos y los organiza en una estructura lógica jerárquica llamada cuadro de clasificación.`,
+        source: `Cap. 4.2 · La clasificación`
+      },
+      {
+        id: 27,
+        module: `05 · Clasificación y Valoración`,
+        question: `En la propuesta gráfica de Josep Matas sobre los principios archivísticos por niveles del fondo, ¿a qué nivel corresponde el «Principio de respeto al orden originario» y la práctica de la ordenación?`,
+        options: [
+          `Exclusivamente a los grupos de fondos nacionales`,
+          `A la nivelación presupuestaria de la entidad productora`,
+          `A las unidades documentales compuestas (expedientes) y unidades documentales simples`,
+          `Únicamente a la arquitectura exterior del edificio del archivo histórico`
+        ],
+        correct: 2,
+        explanation: `En el cuadro de Josep Matas recogido en el capítulo 4.2, el principio de respeto a la estructura se vincula con la clasificación de fondos, grupos de series y series, mientras que el principio de respeto al orden originario se aplica a las unidades documentales compuestas y simples mediante la ordenación.`,
+        source: `Cap. 4.2 · 2.2 Principio de respeto del orden original`
+      },
+      {
+        id: 28,
+        module: `05 · Clasificación y Valoración`,
+        question: `¿Qué diferencia existe entre «valoración» y «disposición» (según ISO 15489) explicada por Lluís Cermeno y Elena Rivas Palá?`,
+        options: [
+          `La valoración destruye los documentos y la disposición los describe en catálogos`,
+          `Son sinónimos exactos que designan el traslado físico de cajas al archivo intermedio`,
+          `La disposición solo aplica al papel y la valoración exclusivamente a documentos electrónicos`,
+          `La valoración analiza las series documentales para determinar sus valores primarios y secundarios, mientras que la disposición ejecuta esos acuerdos mediante retención, destrucción o transferencia`
+        ],
+        correct: 3,
+        explanation: `Los autores advierten no confundir ambos términos: la valoración es la fase técnica de análisis de las series para fijar sus valores y plazos, mientras que la disposición (según ISO 15489) es la puesta en práctica de los resultados de la valoración (eliminación o transferencia).`,
+        source: `Cap. 4.4 · 1.1 Valoración y selección`
+      },
+      {
+        id: 29,
+        module: `05 · Clasificación y Valoración`,
+        question: `¿Cómo se distinguen el «valor primario» y el «valor secundario» de un documento?`,
+        options: [
+          `El valor primario responde al fin administrativo, legal o probatorio para el que fue creado, y el valor secundario alude a su utilidad posterior como fuente histórica y cultural`,
+          `El valor primario corresponde solo a copias simples y el secundario a originales sellados`,
+          `El valor primario surge cincuenta años después de la muerte del productor y el secundario al nacer`,
+          `El valor primario es el precio comercial del soporte y el secundario su costo de almacenamiento`
+        ],
+        correct: 0,
+        explanation: `Todo documento nace con un valor primario (administrativo, y paralelo a él un valor legal, jurídico o probatorio). Con el tiempo, si posee relevancia para la investigación histórica y la acción cultural, adquiere un valor secundario, también llamado histórico o permanente.`,
+        source: `Cap. 1 · 3.3 y Cap. 4.4 · 1.1`
+      },
+      {
+        id: 30,
+        module: `05 · Clasificación y Valoración`,
+        question: `¿Qué precaución técnica debe observarse en el momento de ejecutar la destrucción total de una serie documental sin valor?`,
+        options: [
+          `Ejecutar la destrucción de forma verbal sin dejar actas ni registros para evitar trámites`,
+          `Reservar una o varias unidades documentales de la serie como muestra o ejemplo, destruir el resto sin posibilidad de reconstrucción y documentar todo el proceso`,
+          `Vender los expedientes íntegros sin triturar para financiar la compra de mobiliario`,
+          `Esperar a que los formatos electrónicos sean ilegibles durante veinte años antes de evaluarlos`
+        ],
+        correct: 1,
+        explanation: `El capítulo 4.4 exige documentar cuidadosamente toda eliminación (actas, listados, libro registro), destruir de modo que resulte imposible reconstruir los documentos y reservar en todo caso una o varias unidades documentales de cada serie a modo de ejemplo.`,
+        source: `Cap. 4.4 · 3, 4.2 y 5.2.4`
+      },
+      {
+        id: 31,
+        module: `06 · Sistema y Buenas Prácticas`,
+        question: `Según José Antonio Sáinz Varela, ¿qué dos límites infranqueables debe plantear el archivero al arquitecto al proyectar un edificio de archivo?`,
+        options: [
+          `Priorizar la estética de la fachada por encima de la distribución interior y eliminar los depósitos cerrados`,
+          `Ubicar las salas de consulta en los sótanos húmedos y los depósitos bajo luz solar directa`,
+          `Que ninguna obra deteriore las condiciones de conservación de un fondo documental ni disminuya su capacidad para difundir la información que contiene`,
+          `Impedir cualquier ampliación futura y prohibir la instalación de áreas tecnológicas`
+        ],
+        correct: 2,
+        explanation: `Sáinz Varela advierte que no debe sacrificarse la funcionalidad en beneficio de criterios estéticos exacerbados; el archivero debe fijar dos límites infranqueables: no deteriorar la conservación de los fondos ni mermar su capacidad de difusión informativa.`,
+        source: `Cap. 5.2 · La gestión de recursos`
+      },
+      {
+        id: 32,
+        module: `06 · Sistema y Buenas Prácticas`,
+        question: `Según la cita de Ramón Alberch Fugueras incluida por Virginia Chacón Arias, ¿de qué depende que las leyes de acceso y el derecho de audiencia no queden reducidos a nada?`,
+        options: [
+          `De restringir al máximo la consulta ciudadana para evitar el desgaste físico del papel`,
+          `De eliminar los instrumentos de descripción y conservar los fondos privados fuera de todo control`,
+          `De sustituir la labor de los archiveros por búsquedas manuales sin cuadro de clasificación`,
+          `De que las oficinas dispongan de un sistema de gestión documental para recuperar rápidamente la información y los archivos ofrezcan instrumentos de descripción precisos`
+        ],
+        correct: 3,
+        explanation: `Chacón Arias subraya, citando a Alberch Fugueras, que las disposiciones legales sobre acceso resultan ineficaces si no existen sistemas de gestión de documentos en las oficinas e instrumentos de descripción precisos elaborados por profesionales formados.`,
+        source: `Cap. 5.3 · Gestión de accesos y consultas`
+      },
+      {
+        id: 33,
+        module: `06 · Sistema y Buenas Prácticas`,
+        question: `Para lograr «racionalidad jurídica formal» al redactar normas sobre archivos, ¿qué reglas recuerda Aída Luz Mendoza Navarro?`,
+        options: [
+          `Estudiar las normas vigentes, no vigentes y vacíos normativos, garantizando que la norma superior prima sobre la inferior y la norma especial prevalece sobre la general`,
+          `Evitar consultar otras leyes vinculadas para no complicar la redacción del reglamento interno`,
+          `Aplicar siempre los reglamentos internos de oficina por encima de las leyes nacionales`,
+          `Mantener en vigor simultáneamente todas las normas contradictorias del pasado`
+        ],
+        correct: 0,
+        explanation: `Mendoza Navarro señala que toda propuesta normativa archivística debe guardar armonía con el ordenamiento jurídico mediante un estudio previo de normas vigentes y derogadas, respetando la jerarquía normativa (superior sobre inferior) y el principio de especialidad (especial sobre general).`,
+        source: `Cap. 5.4 · Elaboración de disposiciones normativas`
+      },
+      {
+        id: 34,
+        module: `06 · Sistema y Buenas Prácticas`,
+        question: `Según el Manual de Buenas Prácticas de Joaquim Llansó Sanjuán, ¿cuál es la unidad básica de archivo y qué práctica debe evitarse en las oficinas?`,
+        options: [
+          `La unidad básica es la hoja suelta, debiendo organizarse todo por color de carpeta`,
+          `La unidad básica es el expediente (documentos de un mismo asunto), debiendo evitarse formar colecciones por fecha, número de registro o interlocutor que ataquen su integridad`,
+          `La unidad básica es el libro de registro diario, separando cada oficio de su antecedente`,
+          `La unidad básica es la caja de archivo, mezclando asuntos distintos por orden alfabético`
+        ],
+        correct: 1,
+        explanation: `Llansó Sanjuán destaca que la unidad básica de archivo es el expediente, que agrupa todos los documentos relativos a un mismo asunto, y prohíbe formar colecciones artificiales por fecha, número de registro o interlocutor que desmembren la generación de expedientes y series.`,
+        source: `Cap. 5.5 · Manual de buenas prácticas`
+      },
+      {
+        id: 35,
+        module: `06 · Sistema y Buenas Prácticas`,
+        question: `¿Cuál de las siguientes medidas de preservación física en oficinas recomienda el Manual de Buenas Prácticas?`,
+        options: [
+          `Asegurar todos los expedientes con gomas elásticas, abundantes clips y notas adhesivas (post-it)`,
+          `Taladrar y encuadernar todos los documentos corrientes antes de concluir el trámite`,
+          `Proteger los documentos de la luz solar directa, sustituir gomas y clips por carpetas y subcarpetas, evitar taladrar y dejar testigos al extraer expedientes`,
+          `Permitir que cualquier usuario realice fotocopias sin control ni coordinación en las oficinas`
+        ],
+        correct: 2,
+        explanation: `El Manual de procedimientos recomienda evitar la luz solar directa (que reseca y oxida el papel), sustituir gomas elásticas y clips por carpetas y subcarpetas, limitar grapas y notas adhesivas, evitar taladrar o encuadernar y dejar testigos de extracción provisional.`,
+        source: `Cap. 5.5 · Criterios generales de preservación`
+      },
+      {
+        id: 36,
+        module: `06 · Sistema y Buenas Prácticas`,
+        question: `Según los principios de InterPARES (Duranti, Suderman y Todd) recogidos en el capítulo 3, ¿cómo deben articularse los requisitos de creación y preservación de documentos digitales?`,
+        options: [
+          `Exclusivamente en función del software propietario disponible en el mercado el día de creación`,
+          `Aplazando toda consideración de preservación hasta que el documento pierda su valor legal`,
+          `Prohibiendo que el custodio confiable realice reproducciones auténticas para preservar la información`,
+          `Conforme a los propósitos y resultados deseados más que a tecnologías específicas, asegurando que los componentes digitales puedan preservarse por separado y reensamblarse en el tiempo`
+        ],
+        correct: 3,
+        explanation: `Los principios de creador y preservador de InterPARES establecen que los requisitos deben formularse según el propósito y resultado de preservación deseado (no según tecnologías específicas), insertando la preservación en cada fase del ciclo de vida y permitiendo mantener y reensamblar componentes digitales en el tiempo.`,
+        source: `Cap. 3 · Principios de creador y preservador (InterPARES)`
+      }
+    ];
+
+    // App State
+    let appState = {
+      order: QUESTIONS.map(function (q) { return q.id; }),
+      currentIndex: 0,
+      answers: {},
+      mode: 'full', // 'full' | 'review'
+      reviewIds: [],
+      showSummary: false,
+      isShuffled: false,
+      summaryFilter: 'all'
+    };
+
+    const QUESTION_MAP = {};
+    QUESTIONS.forEach(function (q) {
+      QUESTION_MAP[q.id] = q;
+    });
+
+    const MODULES = [];
+    QUESTIONS.forEach(function (q) {
+      if (MODULES.indexOf(q.module) === -1) {
+        MODULES.push(q.module);
+      }
+    });
+
+    function getActiveIds() {
+      if (appState.mode === 'review') {
+        return appState.reviewIds;
+      }
+      return appState.order;
+    }
+
+    function getCompletedStats() {
+      const ids = getActiveIds();
+      let answered = 0;
+      let correct = 0;
+      let wrong = 0;
+      const missedIds = [];
+
+      ids.forEach(function (id) {
+        const chosen = appState.answers[id];
+        if (typeof chosen === 'number') {
+          answered += 1;
+          const q = QUESTION_MAP[id];
+          if (q && chosen === q.correct) {
+            correct += 1;
+          } else {
+            wrong += 1;
+            missedIds.push(id);
+          }
+        }
+      });
+
+      const total = ids.length;
+      const percent = answered > 0 ? Math.round((correct / answered) * 100) : 0;
+      const totalPercent = total > 0 ? Math.round((correct / total) * 100) : 0;
+      const progressPercent = total > 0 ? Math.round((answered / total) * 100) : 0;
+
+      return {
+        total: total,
+        answered: answered,
+        correct: correct,
+        wrong: wrong,
+        missedIds: missedIds,
+        percent: percent,
+        totalPercent: totalPercent,
+        progressPercent: progressPercent
+      };
+    }
+
+    function shuffleArray(arr) {
+      const copy = arr.slice();
+      for (let i = copy.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const temp = copy[i];
+        copy[i] = copy[j];
+        copy[j] = temp;
+      }
+      return copy;
+    }
+
+    async function persistState() {
+      const statusEl = document.getElementById('save-status');
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === 'function') {
+          await window.notebookAppApi.setAppState(appState);
+          if (statusEl) {
+            statusEl.textContent = `Progreso guardado`;
+          }
+        }
+      } catch (err) {
+        if (statusEl) {
+          statusEl.textContent = `Sesión local activa`;
+        }
+      }
+    }
+
+    function clearArmedButtons() {
+      const btnShuffle = document.getElementById('btn-shuffle');
+      const btnReset = document.getElementById('btn-reset');
+      if (btnShuffle) {
+        btnShuffle.dataset.armed = 'false';
+        btnShuffle.classList.remove('is-armed');
+        const span = btnShuffle.querySelector('span');
+        if (span) span.textContent = `Mezclar preguntas`;
+      }
+      if (btnReset) {
+        btnReset.dataset.armed = 'false';
+        btnReset.classList.remove('is-armed');
+        const span = btnReset.querySelector('span');
+        if (span) span.textContent = `Reiniciar cuestionario`;
+      }
+    }
+
+    function renderTelemetry() {
+      const ids = getActiveIds();
+      const stats = getCompletedStats();
+
+      const statProgress = document.getElementById('stat-progress');
+      const statCorrect = document.getElementById('stat-correct');
+      const statWrong = document.getElementById('stat-wrong');
+      const statPercent = document.getElementById('stat-percent');
+      const progressLabel = document.getElementById('progress-label');
+      const progressBar = document.getElementById('progress-bar');
+      const progressFill = document.getElementById('progress-fill');
+      const orderLabel = document.getElementById('order-label');
+      const modePill = document.getElementById('mode-pill');
+      const headerMeta = document.getElementById('header-meta');
+      const btnExitReview = document.getElementById('btn-exit-review');
+      const btnJumpSummary = document.getElementById('btn-jump-summary');
+
+      const displayIndex = ids.length > 0 ? Math.min(appState.currentIndex + 1, ids.length) : 0;
+
+      if (statProgress) statProgress.textContent = `${displayIndex} / ${stats.total}`;
+      if (statCorrect) statCorrect.textContent = `${stats.correct}`;
+      if (statWrong) statWrong.textContent = `${stats.wrong}`;
+      if (statPercent) statPercent.textContent = `${stats.percent}%`;
+
+      if (progressLabel) {
+        progressLabel.textContent = `Respondidas: ${stats.answered} de ${stats.total} (${stats.progressPercent}%)`;
+      }
+      if (progressBar) {
+        progressBar.setAttribute('aria-valuenow', String(stats.progressPercent));
+      }
+      if (progressFill) {
+        progressFill.style.width = `${stats.progressPercent}%`;
+      }
+
+      if (orderLabel) {
+        if (appState.mode === 'review') {
+          orderLabel.textContent = `Repaso exclusivo de preguntas falladas`;
+        } else if (appState.isShuffled) {
+          orderLabel.textContent = `Orden mezclado aleatoriamente`;
+        } else {
+          orderLabel.textContent = `Orden original del manual`;
+        }
+      }
+
+      if (modePill && headerMeta) {
+        if (appState.mode === 'review') {
+          modePill.textContent = `Modo repaso`;
+          modePill.classList.add('is-review');
+          headerMeta.textContent = `${stats.total} preguntas falladas · Revisión dirigida`;
+        } else {
+          modePill.textContent = `Evaluación integral`;
+          modePill.classList.remove('is-review');
+          headerMeta.textContent = `${QUESTIONS.length} preguntas · Archivística y gestión documental`;
+        }
+      }
+
+      if (btnExitReview) {
+        if (appState.mode === 'review') {
+          btnExitReview.classList.remove('is-hidden');
+        } else {
+          btnExitReview.classList.add('is-hidden');
+        }
+      }
+
+      if (btnJumpSummary) {
+        if (!appState.showSummary && stats.answered === stats.total && stats.total > 0) {
+          btnJumpSummary.classList.remove('is-hidden');
+        } else {
+          btnJumpSummary.classList.add('is-hidden');
+        }
+      }
+    }
+
+    function createStatusSvg(type) {
+      if (type === 'correct') {
+        return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+      }
+      return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+    }
+
+    function renderQuestionView() {
+      const quizView = document.getElementById('quiz-view');
+      const summaryView = document.getElementById('summary-view');
+      if (quizView) quizView.classList.remove('is-hidden');
+      if (summaryView) summaryView.classList.add('is-hidden');
+
+      const ids = getActiveIds();
+      if (ids.length === 0) {
+        openSummaryView();
+        return;
+      }
+
+      if (appState.currentIndex >= ids.length) {
+        appState.currentIndex = ids.length - 1;
+      }
+      if (appState.currentIndex < 0) {
+        appState.currentIndex = 0;
+      }
+
+      const qId = ids[appState.currentIndex];
+      const q = QUESTION_MAP[qId];
+      if (!q) return;
+
+      const counterEl = document.getElementById('q-counter');
+      const topicEl = document.getElementById('q-topic');
+      const stemEl = document.getElementById('q-stem');
+      const optionsContainer = document.getElementById('options-container');
+      const feedbackBox = document.getElementById('feedback-box');
+      const feedbackTitle = document.getElementById('feedback-title');
+      const feedbackExplanation = document.getElementById('feedback-explanation');
+      const feedbackSource = document.getElementById('feedback-source');
+      const btnPrev = document.getElementById('btn-prev');
+      const btnNext = document.getElementById('btn-next');
+      const btnNextLabel = document.getElementById('btn-next-label');
+
+      const padNum = String(appState.currentIndex + 1).padStart(2, '0');
+      const padTotal = String(ids.length).padStart(2, '0');
+
+      if (counterEl) {
+        counterEl.textContent = appState.mode === 'review'
+          ? `Repaso ${padNum} de ${padTotal}`
+          : `Pregunta ${padNum} de ${padTotal}`;
+      }
+      if (topicEl) topicEl.textContent = q.module;
+      if (stemEl) stemEl.textContent = q.question;
+
+      const chosenIndex = appState.answers[q.id];
+      const isAnswered = typeof chosenIndex === 'number';
+
+      if (optionsContainer) {
+        optionsContainer.innerHTML = '';
+        q.options.forEach(function (optText, idx) {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'option-btn';
+          btn.setAttribute('onclick', `handleAnswerSelect(${idx})`);
+
+          if (isAnswered) {
+            btn.disabled = true;
+            if (idx === q.correct) {
+              btn.classList.add('is-correct');
+            } else if (idx === chosenIndex && chosenIndex !== q.correct) {
+              btn.classList.add('is-wrong');
+            } else {
+              btn.classList.add('is-dimmed');
+            }
+          }
+
+          const letterSpan = document.createElement('span');
+          letterSpan.className = 'option-letter';
+          letterSpan.textContent = LETTERS[idx];
+
+          const textSpan = document.createElement('span');
+          textSpan.className = 'option-text';
+          textSpan.textContent = optText;
+
+          const iconSpan = document.createElement('span');
+          iconSpan.className = 'option-status-icon';
+          if (isAnswered) {
+            if (idx === q.correct) {
+              iconSpan.innerHTML = createStatusSvg('correct');
+            } else if (idx === chosenIndex && chosenIndex !== q.correct) {
+              iconSpan.innerHTML = createStatusSvg('wrong');
+            }
+          }
+
+          btn.appendChild(letterSpan);
+          btn.appendChild(textSpan);
+          btn.appendChild(iconSpan);
+          optionsContainer.appendChild(btn);
+        });
+      }
+
+      if (feedbackBox && feedbackTitle && feedbackExplanation && feedbackSource) {
+        if (isAnswered) {
+          const isCorrect = chosenIndex === q.correct;
+          feedbackBox.classList.remove('is-hidden', 'is-correct', 'is-error');
+          feedbackBox.classList.add(isCorrect ? 'is-correct' : 'is-error');
+          feedbackTitle.innerHTML = isCorrect
+            ? `${createStatusSvg('correct')}<span>¡Respuesta correcta!</span>`
+            : `${createStatusSvg('wrong')}<span>Respuesta incorrecta · La opción correcta es la ${LETTERS[q.correct]}</span>`;
+          feedbackExplanation.textContent = q.explanation;
+          feedbackSource.textContent = `Fuente en el cuaderno: ${q.source}`;
+        } else {
+          feedbackBox.classList.add('is-hidden');
+          feedbackBox.classList.remove('is-correct', 'is-error');
+        }
+      }
+
+      if (btnPrev) {
+        btnPrev.disabled = appState.currentIndex === 0;
+      }
+
+      const isLast = appState.currentIndex === ids.length - 1;
+      if (btnNext && btnNextLabel) {
+        btnNext.disabled = !isAnswered;
+        btnNextLabel.textContent = isLast ? `Ver resumen final` : `Siguiente pregunta`;
+      }
+    }
+
+    function renderSummaryView() {
+      const quizView = document.getElementById('quiz-view');
+      const summaryView = document.getElementById('summary-view');
+      if (quizView) quizView.classList.add('is-hidden');
+      if (summaryView) summaryView.classList.remove('is-hidden');
+
+      const stats = getCompletedStats();
+      const summaryPill = document.getElementById('summary-pill');
+      const summaryVerdict = document.getElementById('summary-verdict');
+      const summarySubtext = document.getElementById('summary-subtext');
+      const summaryPercent = document.getElementById('summary-percent');
+      const summaryScoreTotal = document.getElementById('summary-score-total');
+      const summaryCorrectCount = document.getElementById('summary-correct-count');
+      const summaryWrongCount = document.getElementById('summary-wrong-count');
+      const btnReviewMissed = document.getElementById('btn-review-missed');
+      const btnReviewMissedLabel = document.getElementById('btn-review-missed-label');
+
+      if (summaryPill) {
+        if (appState.mode === 'review') {
+          summaryPill.textContent = `Resumen de repaso`;
+          summaryPill.classList.add('is-review');
+        } else {
+          summaryPill.textContent = `Resumen final`;
+          summaryPill.classList.remove('is-review');
+        }
+      }
+
+      if (summaryPercent) summaryPercent.textContent = `${stats.totalPercent}%`;
+      if (summaryScoreTotal) summaryScoreTotal.textContent = `${stats.correct} / ${stats.total}`;
+      if (summaryCorrectCount) summaryCorrectCount.textContent = `${stats.correct}`;
+      if (summaryWrongCount) summaryWrongCount.textContent = `${stats.wrong}`;
+
+      let verdict = `Evaluación completada`;
+      let subtext = `Has respondido las ${stats.total} preguntas del bloque.`;
+
+      if (stats.totalPercent === 100) {
+        verdict = `Dominio sobresaliente`;
+        subtext = `Obtuviste el 100% de aciertos (${stats.correct} de ${stats.total}). No quedan preguntas falladas por repasar.`;
+      } else if (stats.totalPercent >= 80) {
+        verdict = `Muy buen desempeño`;
+        subtext = `Acertaste ${stats.correct} de ${stats.total} preguntas (${stats.totalPercent}%). Puedes repasar únicamente las ${stats.wrong} falladas para consolidar los conceptos.`;
+      } else if (stats.totalPercent >= 60) {
+        verdict = `Base sólida en progreso`;
+        subtext = `Lograste ${stats.correct} aciertos de ${stats.total} (${stats.totalPercent}%). Te recomendamos repasar las ${stats.wrong} preguntas falladas con sus explicaciones del manual.`;
+      } else {
+        verdict = `Oportunidad de refuerzo`;
+        subtext = `Acertaste ${stats.correct} de ${stats.total} preguntas (${stats.totalPercent}%). Utiliza el repaso de preguntas falladas para reforzar los puntos clave del cuaderno.`;
+      }
+
+      if (summaryVerdict) summaryVerdict.textContent = verdict;
+      if (summarySubtext) summarySubtext.textContent = subtext;
+
+      if (btnReviewMissed && btnReviewMissedLabel) {
+        if (stats.wrong > 0) {
+          btnReviewMissed.classList.remove('is-hidden');
+          btnReviewMissedLabel.textContent = appState.mode === 'review'
+            ? `Volver a repasar las falladas (${stats.wrong})`
+            : `Repasar preguntas falladas (${stats.wrong})`;
+        } else {
+          btnReviewMissed.classList.add('is-hidden');
+        }
+      }
+
+      // Module breakdown (only show relevant modules from current active set)
+      const breakdownCard = document.getElementById('breakdown-card');
+      const breakdownList = document.getElementById('breakdown-list');
+      const activeIds = getActiveIds();
+
+      if (breakdownCard && breakdownList) {
+        breakdownList.innerHTML = '';
+        let renderedModules = 0;
+
+        MODULES.forEach(function (modName) {
+          const modIds = activeIds.filter(function (id) {
+            return QUESTION_MAP[id] && QUESTION_MAP[id].module === modName;
+          });
+          if (modIds.length === 0) return;
+
+          renderedModules += 1;
+          let modCorrect = 0;
+          modIds.forEach(function (id) {
+            if (appState.answers[id] === QUESTION_MAP[id].correct) {
+              modCorrect += 1;
+            }
+          });
+          const pct = Math.round((modCorrect / modIds.length) * 100);
+
+          const row = document.createElement('div');
+          row.className = 'breakdown-row';
+
+          const head = document.createElement('div');
+          head.className = 'breakdown-row-head';
+
+          const nameEl = document.createElement('span');
+          nameEl.className = 'breakdown-name';
+          nameEl.textContent = modName;
+
+          const statEl = document.createElement('span');
+          statEl.className = 'breakdown-stat';
+          statEl.textContent = `${modCorrect} / ${modIds.length} (${pct}%)`;
+
+          head.appendChild(nameEl);
+          head.appendChild(statEl);
+
+          const track = document.createElement('div');
+          track.className = 'breakdown-bar-track';
+
+          const fill = document.createElement('div');
+          fill.className = 'breakdown-bar-fill';
+          if (pct === 100) fill.classList.add('is-full');
+          else if (pct < 50) fill.classList.add('is-low');
+          fill.style.width = `${pct}%`;
+
+          track.appendChild(fill);
+          row.appendChild(head);
+          row.appendChild(track);
+          breakdownList.appendChild(row);
+        });
+
+        if (renderedModules === 0) {
+          breakdownCard.classList.add('is-hidden');
+        } else {
+          breakdownCard.classList.remove('is-hidden');
+        }
+      }
+
+      renderSummaryLog();
+    }
+
+    function renderSummaryLog() {
+      const logList = document.getElementById('summary-log-list');
+      const fAll = document.getElementById('filter-all');
+      const fWrong = document.getElementById('filter-wrong');
+      const fCorrect = document.getElementById('filter-correct');
+
+      const stats = getCompletedStats();
+      if (fAll) {
+        fAll.textContent = `Todas (${stats.total})`;
+        fAll.classList.toggle('is-active', appState.summaryFilter === 'all');
+      }
+      if (fWrong) {
+        fWrong.textContent = `Falladas (${stats.wrong})`;
+        fWrong.classList.toggle('is-active', appState.summaryFilter === 'wrong');
+      }
+      if (fCorrect) {
+        fCorrect.textContent = `Correctas (${stats.correct})`;
+        fCorrect.classList.toggle('is-active', appState.summaryFilter === 'correct');
+      }
+
+      if (!logList) return;
+      logList.innerHTML = '';
+
+      const ids = getActiveIds();
+      let countShown = 0;
+
+      ids.forEach(function (id, index) {
+        const q = QUESTION_MAP[id];
+        if (!q) return;
+        const chosen = appState.answers[id];
+        const isCorrect = chosen === q.correct;
+
+        if (appState.summaryFilter === 'wrong' && isCorrect) return;
+        if (appState.summaryFilter === 'correct' && !isCorrect) return;
+
+        countShown += 1;
+        const item = document.createElement('div');
+        item.className = `log-item ${isCorrect ? 'is-correct' : 'is-wrong'}`;
+
+        const top = document.createElement('div');
+        top.className = 'log-item-top';
+
+        const numSpan = document.createElement('span');
+        numSpan.textContent = `Pregunta ${String(index + 1).padStart(2, '0')} · ${q.module}`;
+
+        const badgeSpan = document.createElement('span');
+        badgeSpan.className = isCorrect ? 'log-badge-ok' : 'log-badge-err';
+        badgeSpan.textContent = isCorrect ? `Correcta` : `Fallada`;
+
+        top.appendChild(numSpan);
+        top.appendChild(badgeSpan);
+
+        const qText = document.createElement('p');
+        qText.className = 'log-question';
+        qText.textContent = q.question;
+
+        const ansLine = document.createElement('p');
+        ansLine.className = 'log-answer-line';
+        const chosenLabel = typeof chosen === 'number'
+          ? `${LETTERS[chosen]}. ${q.options[chosen]}`
+          : `Sin responder`;
+        const correctLabel = `${LETTERS[q.correct]}. ${q.options[q.correct]}`;
+
+        if (isCorrect) {
+          ansLine.innerHTML = `<strong>Tu respuesta:</strong> `;
+          ansLine.appendChild(document.createTextNode(chosenLabel));
+        } else {
+          ansLine.innerHTML = `<strong>Tu respuesta:</strong> `;
+          ansLine.appendChild(document.createTextNode(`${chosenLabel} · `));
+          const strongRight = document.createElement('strong');
+          strongRight.textContent = `Correcta: `;
+          ansLine.appendChild(strongRight);
+          ansLine.appendChild(document.createTextNode(correctLabel));
+        }
+
+        const expLine = document.createElement('p');
+        expLine.className = 'log-answer-line';
+        expLine.textContent = q.explanation;
+
+        item.appendChild(top);
+        item.appendChild(qText);
+        item.appendChild(ansLine);
+        item.appendChild(expLine);
+        logList.appendChild(item);
+      });
+
+      if (countShown === 0) {
+        const emptyMsg = document.createElement('p');
+        emptyMsg.className = 'log-answer-line';
+        emptyMsg.textContent = appState.summaryFilter === 'wrong'
+          ? `No hay preguntas falladas en este conjunto.`
+          : `No hay preguntas en este filtro.`;
+        logList.appendChild(emptyMsg);
+      }
+    }
+
+    function renderAll() {
+      renderTelemetry();
+      if (appState.showSummary) {
+        renderSummaryView();
+      } else {
+        renderQuestionView();
+      }
+    }
+
+    function handleAnswerSelect(optionIdx) {
+      clearArmedButtons();
+      const ids = getActiveIds();
+      const qId = ids[appState.currentIndex];
+      if (!qId || typeof appState.answers[qId] === 'number') return;
+
+      appState.answers[qId] = optionIdx;
+      renderAll();
+      persistState();
+    }
+
+    function goToPrevQuestion() {
+      clearArmedButtons();
+      if (appState.currentIndex > 0) {
+        appState.currentIndex -= 1;
+        renderAll();
+        persistState();
+      }
+    }
+
+    function goToNextQuestion() {
+      clearArmedButtons();
+      const ids = getActiveIds();
+      const qId = ids[appState.currentIndex];
+      if (typeof appState.answers[qId] !== 'number') return;
+
+      if (appState.currentIndex < ids.length - 1) {
+        appState.currentIndex += 1;
+        renderAll();
+        persistState();
+      } else {
+        appState.showSummary = true;
+        appState.summaryFilter = 'all';
+        renderAll();
+        persistState();
+      }
+    }
+
+    function openSummaryView() {
+      clearArmedButtons();
+      appState.showSummary = true;
+      appState.summaryFilter = 'all';
+      renderAll();
+      persistState();
+    }
+
+    function setSummaryFilter(filterName) {
+      appState.summaryFilter = filterName;
+      renderSummaryLog();
+      persistState();
+    }
+
+    function handleShuffleClick(btn) {
+      const stats = getCompletedStats();
+      if (stats.answered > 0 && !appState.showSummary) {
+        if (btn.dataset.armed !== 'true') {
+          clearArmedButtons();
+          btn.dataset.armed = 'true';
+          btn.classList.add('is-armed');
+          const span = btn.querySelector('span');
+          if (span) span.textContent = `Confirmar mezcla y reiniciar`;
+          return;
+        }
+      }
+      clearArmedButtons();
+      appState.order = shuffleArray(QUESTIONS.map(function (q) { return q.id; }));
+      appState.currentIndex = 0;
+      appState.answers = {};
+      appState.mode = 'full';
+      appState.reviewIds = [];
+      appState.showSummary = false;
+      appState.isShuffled = true;
+      appState.summaryFilter = 'all';
+      renderAll();
+      persistState();
+    }
+
+    function handleResetClick(btn) {
+      const stats = getCompletedStats();
+      if (stats.answered > 0 && !appState.showSummary) {
+        if (btn.dataset.armed !== 'true') {
+          clearArmedButtons();
+          btn.dataset.armed = 'true';
+          btn.classList.add('is-armed');
+          const span = btn.querySelector('span');
+          if (span) span.textContent = `Confirmar reinicio`;
+          return;
+        }
+      }
+      clearArmedButtons();
+      appState.order = QUESTIONS.map(function (q) { return q.id; });
+      appState.currentIndex = 0;
+      appState.answers = {};
+      appState.mode = 'full';
+      appState.reviewIds = [];
+      appState.showSummary = false;
+      appState.isShuffled = false;
+      appState.summaryFilter = 'all';
+      renderAll();
+      persistState();
+    }
+
+    function restartAndShuffleFromSummary() {
+      clearArmedButtons();
+      appState.order = shuffleArray(QUESTIONS.map(function (q) { return q.id; }));
+      appState.currentIndex = 0;
+      appState.answers = {};
+      appState.mode = 'full';
+      appState.reviewIds = [];
+      appState.showSummary = false;
+      appState.isShuffled = true;
+      appState.summaryFilter = 'all';
+      renderAll();
+      persistState();
+    }
+
+    function restartOrderedFromSummary() {
+      clearArmedButtons();
+      appState.order = QUESTIONS.map(function (q) { return q.id; });
+      appState.currentIndex = 0;
+      appState.answers = {};
+      appState.mode = 'full';
+      appState.reviewIds = [];
+      appState.showSummary = false;
+      appState.isShuffled = false;
+      appState.summaryFilter = 'all';
+      renderAll();
+      persistState();
+    }
+
+    function startReviewMissedMode() {
+      clearArmedButtons();
+      const stats = getCompletedStats();
+      if (stats.missedIds.length === 0) return;
+
+      const missedToReview = stats.missedIds.slice();
+      missedToReview.forEach(function (id) {
+        delete appState.answers[id];
+      });
+
+      appState.mode = 'review';
+      appState.reviewIds = missedToReview;
+      appState.currentIndex = 0;
+      appState.showSummary = false;
+      appState.summaryFilter = 'all';
+      renderAll();
+      persistState();
+    }
+
+    function exitReviewMode() {
+      clearArmedButtons();
+      appState.mode = 'full';
+      appState.reviewIds = [];
+      appState.currentIndex = 0;
+      appState.showSummary = false;
+      renderAll();
+      persistState();
+    }
+
+    document.addEventListener('keydown', function (ev) {
+      if (appState.showSummary) return;
+      const tag = ev.target && ev.target.tagName ? ev.target.tagName.toLowerCase() : '';
+      if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
+
+      const key = ev.key.toUpperCase();
+      if (key === 'A' || key === '1') {
+        handleAnswerSelect(0);
+      } else if (key === 'B' || key === '2') {
+        handleAnswerSelect(1);
+      } else if (key === 'C' || key === '3') {
+        handleAnswerSelect(2);
+      } else if (key === 'D' || key === '4') {
+        handleAnswerSelect(3);
+      } else if (ev.key === 'Enter' || ev.key === 'ArrowRight') {
+        const ids = getActiveIds();
+        const qId = ids[appState.currentIndex];
+        if (qId && typeof appState.answers[qId] === 'number' && document.activeElement.tagName.toLowerCase() !== 'button') {
+          goToNextQuestion();
+        }
+      } else if (ev.key === 'ArrowLeft') {
+        if (appState.currentIndex > 0) {
+          goToPrevQuestion();
+        }
+      }
+    });
+
+    async function initQuizApp() {
+      const statusEl = document.getElementById('save-status');
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === 'function') {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && Array.isArray(saved.order) && saved.order.length === QUESTIONS.length) {
+            appState = {
+              order: saved.order,
+              currentIndex: typeof saved.currentIndex === 'number' ? saved.currentIndex : 0,
+              answers: saved.answers && typeof saved.answers === 'object' ? saved.answers : {},
+              mode: saved.mode === 'review' ? 'review' : 'full',
+              reviewIds: Array.isArray(saved.reviewIds) ? saved.reviewIds : [],
+              showSummary: Boolean(saved.showSummary),
+              isShuffled: Boolean(saved.isShuffled),
+              summaryFilter: saved.summaryFilter || 'all'
+            };
+            if (statusEl) statusEl.textContent = `Progreso restaurado`;
+          }
+        }
+      } catch (err) {
+        if (statusEl) statusEl.textContent = `Sesión local activa`;
+      }
+
+      renderAll();
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === 'function') {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    initQuizApp();
+  </script>
+</body>
+</html>
